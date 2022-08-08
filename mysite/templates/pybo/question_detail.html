@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- {% load static %} 태그를 먼저 사용해야 함 -->
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css'}">
+</head>
+<body>
+<h1>{{ question.subject }}</h1>
+<div>
+    {{ question.content }}
+</div>
+<h5>{{ question.answer_set.count }}개의 답변이 있습니다.</h5>
+<div>
+    <ul>
+        {% for answer in question.answer_set.all %}
+            <li>{{ answer.content }}</li>
+        {% endfor %}
+    </ul>
+</div>
+<!--
+textarea: 내용을 입력할 수 있는 텍스트 창 태그
+form: 답변 저장을 위한 태그, 보안 관련 항목으로 바로 밑에 {% csrf_token %}  태그를 항상 위치해야 한다.
+-->
+<form action="{% url 'pybo:answer_create' question.id %}" method="post">
+    {% csrf_token %}
+    <textarea name="content" id="content" rows="15"></textarea>
+    <input type="submit" value="답변등록">
+</form>
+</body>
+</html>
